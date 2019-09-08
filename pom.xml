@@ -23,7 +23,7 @@
 
     <properties>
         <application.version>${project.version}</application.version>
-        <logstash.logback.encoder.version>5.2</logstash.logback.encoder.version>
+        <logstash.logback.encoder.version>6.2</logstash.logback.encoder.version>
         <springfox.version>2.4.0</springfox.version>
     </properties>
 
