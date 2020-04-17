@@ -12,6 +12,10 @@
     <artifactId>ereg-mapper-core</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>no.nav.registre.testnorge</groupId>
+            <artifactId>testnorge-domain</artifactId>
+        </dependency>
         <!--Utility-->
         <dependency>
             <groupId>org.projectlombok</groupId>

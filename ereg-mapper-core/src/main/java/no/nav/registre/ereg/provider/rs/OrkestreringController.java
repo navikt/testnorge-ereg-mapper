@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
 import no.nav.registre.ereg.service.FlatfileService;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
 
 @Slf4j
 @RestController
@@ -24,13 +24,13 @@ public class OrkestreringController {
     private final FlatfileService flatfileService;
 
     @PostMapping("/generer")
-    public ResponseEntity<String> generer(@Valid @RequestBody List<EregDataRequest> data) {
+    public ResponseEntity<String> generer(@Valid @RequestBody List<EregDTO> data) {
         return ResponseEntity.ok(flatfileService.mapEreg(data, false, ""));
     }
 
     @PostMapping("/opprett")
     public ResponseEntity<String> opprettEnheterIEreg(
-            @Valid @RequestBody List<EregDataRequest> data,
+            @RequestBody List<EregDTO> data,
             @RequestParam boolean lastOpp,
             @RequestParam String miljoe
     ) {

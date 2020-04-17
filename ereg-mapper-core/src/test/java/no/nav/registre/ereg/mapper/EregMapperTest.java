@@ -1,5 +1,10 @@
 package no.nav.registre.ereg.mapper;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,16 +15,12 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 import no.nav.registre.ereg.TestUtil;
 import no.nav.registre.ereg.consumer.rs.EregConsumer;
 import no.nav.registre.ereg.csv.NaeringskodeRecord;
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
-import no.nav.registre.ereg.provider.rs.request.Naeringskode;
 import no.nav.registre.ereg.service.NameService;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.NaeringskodeDTO;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
@@ -40,7 +41,7 @@ public class EregMapperTest {
         when(nameService.getRandomNaeringskode()).thenReturn(NaeringskodeRecord.builder().code("01.120").validFrom("1900-01-01").build());
         when(nameService.getFullNames(anyList(), anyString())).thenReturn(Collections.singletonList("Gul Bolle AS"));
 
-        EregDataRequest request = EregDataRequest.builder()
+        EregDTO request = EregDTO.builder()
                 .orgnr("123")
                 .enhetstype("AS")
                 .endringsType("N")
@@ -58,11 +59,11 @@ public class EregMapperTest {
 
         when(nameService.getFullNames(anyList(), anyString())).thenReturn(Collections.singletonList("Gul Bolle"));
 
-        EregDataRequest request = EregDataRequest.builder()
+        EregDTO request = EregDTO.builder()
                 .orgnr("123")
                 .enhetstype("BEDR")
                 .endringsType("N")
-                .naeringskode(Naeringskode.builder()
+                .naeringskode(NaeringskodeDTO.builder()
                         .gyldighetsdato("18062019")
                         .hjelpeEnhet(false)
                         .kode("0?")
@@ -81,11 +82,11 @@ public class EregMapperTest {
 
         when(nameService.getFullNames(anyList(), anyString())).thenReturn(Collections.singletonList("Gul Bolle Dyrking av sukkerrør AS"));
 
-        EregDataRequest request = EregDataRequest.builder()
+        EregDTO request = EregDTO.builder()
                 .orgnr("123")
                 .enhetstype("AS")
                 .endringsType("N")
-                .naeringskode(Naeringskode.builder()
+                .naeringskode(NaeringskodeDTO.builder()
                         .gyldighetsdato("20191806")
                         .hjelpeEnhet(false)
                         .kode("0?")

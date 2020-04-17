@@ -21,15 +21,29 @@
         <module>ereg-mapper-local</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>github-package-registry-navikt</id>
+            <url>https://maven.pkg.github.com/navikt/maven-release</url>
+        </repository>
+    </repositories>
+
     <properties>
         <application.version>${project.version}</application.version>
         <logstash.logback.encoder.version>5.2</logstash.logback.encoder.version>
         <springfox.version>2.4.0</springfox.version>
         <maven.compiler-plugin.version>3.8.1</maven.compiler-plugin.version>
+        <testnorge-domain.version>1.2020.04.17-15.24-78dc0fbddcea</testnorge-domain.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>no.nav.registre.testnorge</groupId>
+                <artifactId>testnorge-domain</artifactId>
+                <version>${testnorge-domain.version}</version>
+            </dependency>
+
             <!--LOGGING-->
             <dependency>
                 <groupId>net.logstash.logback</groupId>
