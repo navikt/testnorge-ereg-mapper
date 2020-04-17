@@ -21,15 +21,50 @@
         <module>ereg-mapper-local</module>
     </modules>
 
+    <repositories>
+        <!-- Det generelle interne Nexus-repoet til NAV (brukes kun internt) -->
+        <repository>
+            <id>nexus-internal-release</id>
+            <url>https://repo.adeo.no/repository/maven-release</url>
+        </repository>
+        <!-- Mirror foran Maven Central NAV (brukes kun internt) -->
+        <repository>
+            <id>nexus-internal-mirror</id>
+            <url>https://repo.adeo.no/repository/maven-public</url>
+        </repository>
+        <!-- Skal brukes hvis bygget kjører internt (f.eks. Jenkins, fra utviklerimage, eller via ScaleFT) -->
+        <repository>
+            <id>internal-mirror-github-navikt</id>
+            <url>https://repo.adeo.no/repository/github-package-registry-navikt/</url>
+        </repository>
+        <!-- Skal brukes hvis bygget kjøres fra en Github Action -->
+        <repository>
+            <id>github-package-registry-navikt</id>
+            <url>https://maven.pkg.github.com/navikt/maven-release</url>
+        </repository>
+        <!-- Skal brukes hvis bygget kjører utenfor NAV (f.eks. en ekstern maskin, eller Circle CI) -->
+        <repository>
+            <id>external-mirror-github-navikt</id>
+            <url>https://github-package-registry-mirror.gc.nav.no/cached/maven-release</url>
+        </repository>
+    </repositories>
+
     <properties>
         <application.version>${project.version}</application.version>
         <logstash.logback.encoder.version>5.2</logstash.logback.encoder.version>
         <springfox.version>2.4.0</springfox.version>
         <maven.compiler-plugin.version>3.8.1</maven.compiler-plugin.version>
+        <testnorge-domain.version>1.2020.04.17-15.24-78dc0fbddcea</testnorge-domain.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>no.nav.registre.testnorge</groupId>
+                <artifactId>testnorge-domain</artifactId>
+                <version>${testnorge-domain.version}</version>
+            </dependency>
+
             <!--LOGGING-->
             <dependency>
                 <groupId>net.logstash.logback</groupId>

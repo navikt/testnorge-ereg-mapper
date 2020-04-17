@@ -10,7 +10,7 @@ import java.util.List;
 
 import no.nav.registre.ereg.consumer.rs.JenkinsConsumer;
 import no.nav.registre.ereg.mapper.EregMapper;
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
 
 @Slf4j
 @Service
@@ -20,7 +20,7 @@ public class FlatfileService {
     private final EregMapper mapper;
     private final JenkinsConsumer jenkinsConsumer;
 
-    public String mapEreg(List<EregDataRequest> data, boolean sendToEreg, String env) {
+    public String mapEreg(List<EregDTO> data, boolean sendToEreg, String env) {
         String eregData = mapper.mapEregFromRequests(data, env, sendToEreg);
         log.info(eregData);
         if (sendToEreg) {

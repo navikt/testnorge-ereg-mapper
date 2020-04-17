@@ -5,18 +5,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import no.nav.registre.ereg.provider.rs.request.Adresse;
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
-import no.nav.registre.ereg.provider.rs.request.Kapital;
-import no.nav.registre.ereg.provider.rs.request.Maalform;
-import no.nav.registre.ereg.provider.rs.request.Naeringskode;
-import no.nav.registre.ereg.provider.rs.request.Navn;
-import no.nav.registre.ereg.provider.rs.request.Telefon;
-import no.nav.registre.ereg.provider.rs.request.UnderlagtHjemland;
-import no.nav.registre.ereg.provider.rs.request.UtenlandsRegister;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.AdresseDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.KapitalDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.Maalform;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.NaeringskodeDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.NavnDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.TelefonDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.UnderlagtHjemlandDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.UtenlandsRegisterDTO;
 
 public class TestUtil {
-    public static EregDataRequest createDefaultEregData() {
+    public static EregDTO createDefaultEregData() {
 
         ArrayList<String> navneListe = new ArrayList<>();
         navneListe.add("Flott");
@@ -28,22 +28,22 @@ public class TestUtil {
         Map<String, String> statuser = new HashMap<>();
         statuser.put("IPF", "N");
 
-        return EregDataRequest.builder()
+        return EregDTO.builder()
                 .orgnr("123")
-                .navn(Navn.builder()
+                .navn(NavnDTO.builder()
                         .navneListe(navneListe)
                         .redNavn("Tull")
                         .build())
                 .enhetstype("BEDR")
                 .endringsType("N")
-                .adresse(Adresse.builder()
+                .adresse(AdresseDTO.builder()
                         .adresser(adresser)
                         .kommunenr("1")
                         .landkode("NOR")
                         .postnr("0175")
                         .poststed("OSLO")
                         .build())
-                .forretningsAdresse(Adresse.builder()
+                .forretningsAdresse(AdresseDTO.builder()
                         .adresser(adresser)
                         .kommunenr("1")
                         .landkode("NOR")
@@ -56,7 +56,7 @@ public class TestUtil {
                 .harAnsatte(true)
                 .sektorKode("AB")
                 .stiftelsesDato("18062019")
-                .telefon(Telefon.builder()
+                .telefon(TelefonDTO.builder()
                         .fast("11111111")
                         .fax("22222222")
                         .mobil("33333333")
@@ -69,8 +69,8 @@ public class TestUtil {
                 .utelukkendeVirksomhetINorge(true)
                 .heleidINorge(true)
                 .fravalgAvRevisjonen(false)
-                .utenlandsRegister(UtenlandsRegister.builder()
-                        .adresse(Adresse.builder()
+                .utenlandsRegister(UtenlandsRegisterDTO.builder()
+                        .adresse(AdresseDTO.builder()
                                 .adresser(adresser)
                                 .kommunenr("1")
                                 .landkode("NOR")
@@ -82,20 +82,20 @@ public class TestUtil {
                         .build())
                 .statuser(statuser)
                 .kjoensfordeling(true)
-                .underlagtHjemland(UnderlagtHjemland.builder()
+                .underlagtHjemland(UnderlagtHjemlandDTO.builder()
                         .beskrivelseHjemland("Noe som ikke er mer enn 70 tegn")
                         .beskrivelseNorge("Enda mer under 70")
                         .foretaksformHjemland("AS")
                         .underlagtLovgivningLandkoode("J")
                         .build())
-                .kapital(Kapital.builder()
+                .kapital(KapitalDTO.builder()
                         .valuttakode("2?")
                         .kapital("111")
                         .kapitalBundet("333")
                         .kapitalInnbetalt("222")
                         .fritekst("Noe som kan gå over flere records........................... Minst 70 tegn for å få delt opp records i flere")
                         .build())
-                .naeringskode(Naeringskode.builder()
+                .naeringskode(NaeringskodeDTO.builder()
                         .gyldighetsdato("18062019")
                         .hjelpeEnhet(false)
                         .kode("0?")

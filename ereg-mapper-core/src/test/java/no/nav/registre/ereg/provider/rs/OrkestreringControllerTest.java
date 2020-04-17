@@ -1,5 +1,11 @@
 package no.nav.registre.ereg.provider.rs;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,22 +19,17 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 import no.nav.registre.ereg.TestUtil;
 import no.nav.registre.ereg.config.AppConfig;
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
 import no.nav.registre.ereg.service.FlatfileService;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
 
 @Slf4j
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(classes = {OrkestreringController.class, FlatfileService.class, AppConfig.class})
 public class OrkestreringControllerTest {
 
-    private EregDataRequest data;
+    private EregDTO data;
 
     private final String ENV = "t";
 

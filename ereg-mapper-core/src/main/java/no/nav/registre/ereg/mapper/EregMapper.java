@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 
 import no.nav.registre.ereg.consumer.rs.EregConsumer;
 import no.nav.registre.ereg.csv.NaeringskodeRecord;
-import no.nav.registre.ereg.provider.rs.request.Adresse;
-import no.nav.registre.ereg.provider.rs.request.EregDataRequest;
-import no.nav.registre.ereg.provider.rs.request.Kapital;
-import no.nav.registre.ereg.provider.rs.request.Knytning;
-import no.nav.registre.ereg.provider.rs.request.Maalform;
-import no.nav.registre.ereg.provider.rs.request.Naeringskode;
-import no.nav.registre.ereg.provider.rs.request.Navn;
-import no.nav.registre.ereg.provider.rs.request.Telefon;
-import no.nav.registre.ereg.provider.rs.request.UnderlagtHjemland;
-import no.nav.registre.ereg.provider.rs.request.UtenlandsRegister;
 import no.nav.registre.ereg.service.NameService;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.AdresseDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.EregDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.KapitalDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.KnytningDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.Maalform;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.NaeringskodeDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.NavnDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.TelefonDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.UnderlagtHjemlandDTO;
+import no.nav.registre.testnorge.domain.dto.eregmapper.v1.UtenlandsRegisterDTO;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,7 +42,7 @@ public class EregMapper {
     }
 
     public String mapEregFromRequests(
-            List<EregDataRequest> data,
+            List<EregDTO> data,
             String miljoe,
             boolean validate
     ) {
@@ -53,7 +53,7 @@ public class EregMapper {
 
         data.stream()
                 .filter(d -> d.getNavn() == null)
-                .collect(Collectors.groupingBy(EregDataRequest::getEnhetstype))
+                .collect(Collectors.groupingBy(EregDTO::getEnhetstype))
                 .forEach(
                         (enhetstype, requests) -> {
                             List<String> naeringskoder = requests.stream()
@@ -64,7 +64,7 @@ public class EregMapper {
                                             if (!"".equals(randomNaeringskode.getValidFrom())) {
                                                 dato = randomNaeringskode.getValidFrom().replace("-", "");
                                             }
-                                            d.setNaeringskode(Naeringskode.builder()
+                                            d.setNaeringskode(NaeringskodeDTO.builder()
                                                     .kode(randomNaeringskode.getCode())
                                                     .hjelpeEnhet(false)
                                                     .gyldighetsdato(dato)
@@ -83,12 +83,12 @@ public class EregMapper {
                                         }
                                         return d.getNaeringskode();
                                     })
-                                    .map(Naeringskode::getKode)
+                                    .map(NaeringskodeDTO::getKode)
                                     .collect(Collectors.toList());
                             List<String> fullNames = nameService.getFullNames(naeringskoder, enhetstype);
                             for (int i = 0; i < requests.size(); i++) {
                                 requests.get(i).setNavn(
-                                        Navn.builder()
+                                        NavnDTO.builder()
                                                 .navneListe(Collections.singletonList(fullNames.get(i)))
                                                 .build()
                                 );
@@ -96,7 +96,7 @@ public class EregMapper {
                         }
                 );
 
-        for (EregDataRequest eregDataRequest : data) {
+        for (EregDTO eregDataRequest : data) {
             if (validate) {
                 if (eregConsumer.checkExists(eregDataRequest.getOrgnr(), miljoe)) {
                     continue;
@@ -113,7 +113,7 @@ public class EregMapper {
         return eregFile.toString();
     }
 
-    private RecordsAndCount createUnit(EregDataRequest data) {
+    private RecordsAndCount createUnit(EregDTO data) {
         int numRecords = 0;
         StringBuilder file;
         if ("U".equals(data.getEndringsType())) {
@@ -124,18 +124,18 @@ public class EregMapper {
         String endringsType = "N";
         numRecords++;
 
-        Navn navn = data.getNavn();
+        NavnDTO navn = data.getNavn();
         assert (navn != null);
         file.append(createNavn(navn.getNavneListe(), navn.getRedNavn() == null ? "" : navn.getRedNavn(), endringsType));
         numRecords++;
 
-        Adresse adresse = data.getAdresse();
+        AdresseDTO adresse = data.getAdresse();
         if (adresse != null) {
             file.append(createAdresse("PADR", endringsType, adresse.getAdresser(), adresse.getPostnr(), adresse.getLandkode(), adresse.getKommunenr(), adresse.getPoststed()));
             numRecords++;
         }
 
-        Adresse forretningsAdresse = data.getForretningsAdresse();
+        AdresseDTO forretningsAdresse = data.getForretningsAdresse();
         if (forretningsAdresse != null) {
             file.append(createAdresse("FADR", endringsType, forretningsAdresse.getAdresser(), forretningsAdresse.getPostnr(), forretningsAdresse.getLandkode(), forretningsAdresse.getKommunenr(),
                     forretningsAdresse.getPoststed()));
@@ -178,7 +178,7 @@ public class EregMapper {
             numRecords++;
         }
 
-        Telefon telefon = data.getTelefon();
+        TelefonDTO telefon = data.getTelefon();
         if (telefon != null) {
             if (telefon.getFast() != null) {
                 file.append(createSingleFieldWithBase(16, "TFON", endringsType, telefon.getFast()));
@@ -240,7 +240,7 @@ public class EregMapper {
             numRecords++;
         }
 
-        UtenlandsRegister utenlandsRegister = data.getUtenlandsRegister();
+        UtenlandsRegisterDTO utenlandsRegister = data.getUtenlandsRegister();
         if (utenlandsRegister != null) {
             file.append(createHjemlandsRegister(utenlandsRegister.getNavn(), utenlandsRegister.getRegisterNr(), utenlandsRegister.getAdresse(), endringsType));
             numRecords++;
@@ -254,7 +254,7 @@ public class EregMapper {
             }
         }
 
-        UnderlagtHjemland underlagtHjemland = data.getUnderlagtHjemland();
+        UnderlagtHjemlandDTO underlagtHjemland = data.getUnderlagtHjemland();
         if (underlagtHjemland != null) {
             file.append(createUnderlagtHjemlandsLovgivning(underlagtHjemland.getUnderlagtLovgivningLandkoode(),
                     underlagtHjemland.getForetaksformHjemland(),
@@ -263,7 +263,7 @@ public class EregMapper {
             numRecords++;
         }
 
-        Kapital kapital = data.getKapital();
+        KapitalDTO kapital = data.getKapital();
         if (kapital != null) {
             final int RECORD_SIZE = 70;
             int size = kapital.getFritekst().length();
@@ -281,7 +281,7 @@ public class EregMapper {
             }
         }
 
-        Naeringskode naeringskode = data.getNaeringskode();
+        NaeringskodeDTO naeringskode = data.getNaeringskode();
         if (naeringskode != null) {
             file.append(createNaeringskodeRecord(naeringskode.getKode(), naeringskode.getGyldighetsdato(),
                     naeringskode.getHjelpeEnhet(), endringsType));
@@ -314,7 +314,7 @@ public class EregMapper {
             }
         }
 
-        List<Knytning> knytninger = data.getKnytninger();
+        List<KnytningDTO> knytninger = data.getKnytninger();
         if (knytninger != null) {
             List<String> collect = knytninger.stream().map(k -> createKnyntningRecord(k.getType(),
                     k.getAnsvarsandel(),
@@ -545,7 +545,7 @@ public class EregMapper {
     private String createHjemlandsRegister(
             List<String> navn,
             String registerNr,
-            Adresse adresse,
+            AdresseDTO adresse,
             String endringsType
     ) {
 
