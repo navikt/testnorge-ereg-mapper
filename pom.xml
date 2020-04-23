@@ -21,14 +21,6 @@
         <module>ereg-mapper-local</module>
     </modules>
 
-    <repositories>
-        <!-- Skal brukes hvis bygget kjøres fra en Github Action -->
-        <repository>
-            <id>github-package-registry-navikt</id>
-            <url>https://maven.pkg.github.com/navikt/maven-release</url>
-        </repository>
-    </repositories>
-
     <properties>
         <application.version>${project.version}</application.version>
         <logstash.logback.encoder.version>5.2</logstash.logback.encoder.version>
